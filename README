@@ -96,11 +96,6 @@ B) Actividades
 4. GET /actividades/detalle-proveedores
    - Lista actividades junto a su proveedor (o null si no tiene).
 
-C) Proveedores (opcional)
-
-- Ejemplo: GET /proveedores -> Lista proveedores.
-- Ejemplo: GET /proveedores/{id}/actividades -> Lista actividades de un proveedor.
-
 ## Conclusión
 
 Para ejecutar el proyecto localmente:
