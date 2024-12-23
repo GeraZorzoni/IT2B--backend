@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro de Usuario{% endblock %}
+
+{% block body %}
+    <h1>Registro de Usuario</h1>
+    <form action="{{ path('register_user') }}" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+
+        <button type="submit">Registrar</button>
+    </form>
+{% endblock %}

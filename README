@@ -1,0 +1,118 @@
+Proyecto Symfony: Instrucciones y Documentación
+
+## A. Configuración y Ejecución Local
+
+1. Clonar o Descargar el Repositorio
+
+   git clone https://github.com/GeraZorzoni/IT2B--backend.git
+   cd tu-repositorio
+
+2. Instalar Dependencias
+
+   - Asegúrate de tener Composer instalado.
+   - Dentro de la carpeta raíz del proyecto, ejecuta:
+     composer install
+
+3. Configurar la Base de Datos
+
+   - En el archivo .env, localiza la variable DATABASE_URL y actualízala con tus credenciales de MySQL o MariaDB:
+     DATABASE_URL="mysql://usuario:password@127.0.0.1:3306/nombre_base"
+
+   - Crear la base de datos (si no existe):
+     php bin/console doctrine:database:create
+
+   - Ejecutar migraciones para crear tablas y columnas:
+     php bin/console doctrine:migrations:migrate
+
+- (Opcional) Poblar la base de datos con datos de prueba:
+  php bin/console doctrine:fixtures:load
+
+4. Iniciar el Servidor de Desarrollo
+
+   symfony server:start
+
+   (O usar: php -S 127.0.0.1:8000 -t public)
+
+## B. Descripción del Modelo de Datos
+
+1. Usuario
+
+   - id (PK, autoincremental)
+   - username (string, único)
+   - password (string, almacenado de forma segura mediante hash)
+   - roles (json, lista de roles; por defecto ROLE_USER)
+
+2. Proveedor
+
+   - id (PK, autoincremental)
+   - nombre (string, obligatorio)
+
+3. Actividad
+   - id (PK, autoincremental)
+   - nombre (string, obligatorio)
+   - descripcion_corta (string, obligatorio)
+   - descripcion_larga (text, obligatorio)
+   - precio (float/decimal, obligatorio)
+   - proveedor (relación ManyToOne con Proveedor; puede ser null)
+
+Relaciones:
+
+- Un Proveedor puede tener muchas actividades.
+- Una Actividad pertenece (opcionalmente) a un Proveedor.
+
+## C. Endpoints Disponibles
+
+A) Autenticación
+
+1. POST /register
+
+   - Crea un nuevo usuario.
+   - Espera un JSON con {"username": "...", "password": "..."}.
+   - Devuelve 201 (Created) en caso de éxito.
+
+2. POST /login
+   - Valida las credenciales de un usuario.
+   - Espera un JSON con {"username": "...", "password": "..."}.
+   - Retorna 200 (OK) si credenciales válidas; 401 (Unauthorized) si no.
+
+B) Actividades
+
+1. GET /actividades
+
+   - Lista todas las actividades (id, nombre, descripcion_corta, precio).
+   - No incluye descripcion_larga.
+
+2. GET /actividades/{id}
+
+   - Muestra detalle completo de una actividad (incluye descripcion_larga).
+   - Parámetro: {id}.
+
+3. GET /actividades/buscar/{nombre}
+
+   - Busca actividades por nombre (coincidencia parcial).
+   - Parámetro: {nombre}.
+   - No incluye descripcion_larga.
+
+4. GET /actividades/detalle-proveedores
+   - Lista actividades junto a su proveedor (o null si no tiene).
+
+C) Proveedores (opcional)
+
+- Ejemplo: GET /proveedores -> Lista proveedores.
+- Ejemplo: GET /proveedores/{id}/actividades -> Lista actividades de un proveedor.
+
+## Conclusión
+
+Para ejecutar el proyecto localmente:
+
+1. Instalar dependencias (composer install).
+2. Configurar .env con las credenciales de la BD.
+3. Crear la base (doctrine:database:create) y ejecutar migraciones (doctrine:migrations:migrate).
+4. Iniciar el servidor (symfony server:start).
+5. Probar los endpoints:
+   - POST /register
+   - POST /login
+   - GET /actividades
+   - GET /actividades/{id}
+   - GET /actividades/buscar/{nombre}
+   - GET /actividades/detalle-proveedores
